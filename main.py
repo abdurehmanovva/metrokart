@@ -2,14 +2,12 @@ import datetime
 
 class MetroKart:
     def __init__(self):
-        # Başlanğıc dəyərlər (PHP-dəki xassələr kimi)
         self.pin = "1234"
         self.balance = 0.0
         self.daily_limit = 100.0
         self.added_today = 0.0
         self.mode = 'normal'
         
-        # Statistika üçün
         self.ride_count = 0
         self.total_paid = 0.0
         self.total_discount = 0.0
@@ -17,8 +15,6 @@ class MetroKart:
 
     def run(self):
         print("=== MetroKart Simulyatoruna Xoş Gəlmisiniz ===")
-        
-        # PIN Yoxlanışı
         for cehd in range(3, 0, -1):
             user_pin = input(f"4 rəqəmli PIN daxil edin ({cehd} cəhdiniz qaldı): ")
             if user_pin == self.pin:
@@ -85,7 +81,6 @@ class MetroKart:
         actual_fare = 0.40
         discount = 0.0
 
-        # Endirim məntiqi
         if self.mode == 'telebe':
             actual_fare = 0.20
         elif self.mode == 'pensiyaci':
@@ -99,11 +94,9 @@ class MetroKart:
                 
         discount = base_fare - actual_fare
 
-        # Balans yoxlanışı
         if self.balance >= actual_fare:
             self.execute_ride(actual_fare, discount)
         else:
-            # Təcili keçid məntiqi (- borc yaranması)
             if self.mode == 'normal' and 0.30 <= self.balance < actual_fare:
                 cavab = input("Balans kifayət etmir. Təcili keçid edilsin? (Bəli - B / Xeyr - X): ").lower()
                 if cavab == 'b':
@@ -135,7 +128,7 @@ class MetroKart:
             print("Xəta: Tam ədəd daxil edin.")
             return
 
-        recent = self.transactions[-n:] # Son N elementi almaq üçün sadə Python qaydası (Slicing)
+        recent = self.transactions[-n:]
         print(f"\n--- SON {n} ƏMƏLİYYAT ---")
         for t in reversed(recent):
             print(f"[{t['date']}] {t['type']} | Məbləğ: {t['amount']:.2f} | Endirim: {t['discount']:.2f} | Yeni Balans: {t['new_balance']:.2f}")
@@ -167,8 +160,7 @@ class MetroKart:
                 print("Belə rejim yoxdur.")
 
     def log_transaction(self, t_type, amount, discount, new_balance):
-        zaman = datetime.datetime.now().strftime("%H:%i:%s")
-        # Python-da massivə (list) element əlavə etmək üçün append() istifadə olunur
+        zaman = datetime.datetime.now().strftime("%H:%M:%S")
         self.transactions.append({
             'date': zaman,
             'type': t_type,
@@ -177,7 +169,6 @@ class MetroKart:
             'new_balance': new_balance
         })
 
-# Proqramı başlatmaq
 if __name__ == "__main__":
     app = MetroKart()
     app.run()
